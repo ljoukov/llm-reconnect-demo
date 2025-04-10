@@ -4,7 +4,7 @@
  */
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "worker",
+	"name": "llm-agent",
 	"main": "src/index.ts",
 	"compatibility_date": "2025-04-09",
 	"migrations": [
