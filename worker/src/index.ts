@@ -14,25 +14,25 @@ export class LlmAgent extends DurableObject<Env> {
 		const [client, server] = Object.values(webSocketPair);
 		this.ctx.acceptWebSocket(server);
 		return new Response(null, {
-		  status: 101,
-		  webSocket: client,
+			status: 101,
+			webSocket: client,
 		});
-	  }
+	}
 
-	  async webSocketMessage(ws: WebSocket, message: ArrayBuffer | string) {
+	async webSocketMessage(ws: WebSocket, message: ArrayBuffer | string) {
 		ws.send(
-		  `[Durable Object] message: ${message}, connections: ${this.ctx.getWebSockets().length}`,
+			`[Durable Object] message: ${message}, connections: ${this.ctx.getWebSockets().length}`,
 		);
-	  }
+	}
 
-	  async webSocketClose(
+	async webSocketClose(
 		ws: WebSocket,
 		code: number,
 		reason: string,
 		wasClean: boolean,
-	  ) {
+	) {
 		ws.close(code, "Durable Object is closing WebSocket");
-	  }
+	}
 }
 
 export default {
@@ -42,13 +42,13 @@ export default {
 			// If there is one, accept the request and return a WebSocket Response.
 			const upgradeHeader = request.headers.get("Upgrade");
 			if (!upgradeHeader || upgradeHeader !== "websocket") {
-			  return new Response(null, {
-				status: 426,
-				statusText: "Durable Object expected Upgrade: websocket",
-				headers: {
-				  "Content-Type": "text/plain",
-				},
-			  });
+				return new Response(null, {
+					status: 426,
+					statusText: "Durable Object expected Upgrade: websocket",
+					headers: {
+						"Content-Type": "text/plain",
+					},
+				});
 			}
 
 			// This example will refer to a single Durable Object instance, since the name "foo" is
@@ -59,7 +59,7 @@ export default {
 			// The Durable Object's fetch handler will accept the server side connection and return
 			// the client
 			return stub.fetch(request);
-		  }
+		}
 
 		const id: DurableObjectId = env.LLM_AGENT_DURABLE_OBJECT.idFromName("foo");
 		const stub = env.LLM_AGENT_DURABLE_OBJECT.get(id);
