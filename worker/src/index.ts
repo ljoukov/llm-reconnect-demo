@@ -20,8 +20,9 @@ export class LlmAgent extends DurableObject<Env> {
 	}
 
 	async webSocketMessage(ws: WebSocket, message: string | ArrayBuffer) {
-		const formattedMessage = `[BROADCAST]: ${message}`;
-		for (const ws of this.ctx.getWebSockets()) {
+		const webSockets = this.ctx.getWebSockets();
+		const formattedMessage = `[BROADCAST:num=${webSockets.length}]: ${message}`;
+		for (const ws of webSockets) {
 			ws.send(formattedMessage);
 		}
 	}
