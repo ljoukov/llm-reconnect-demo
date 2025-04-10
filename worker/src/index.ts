@@ -19,17 +19,18 @@ export class LlmAgent extends DurableObject<Env> {
 		});
 	}
 
-	async webSocketMessage(ws: WebSocket, message: ArrayBuffer | string) {
-		ws.send(
-			`[Durable Object] message: ${message}, connections: ${this.ctx.getWebSockets().length}`,
-		);
+	async webSocketMessage(ws: WebSocket, message: string | ArrayBuffer) {
+		const formattedMessage = `[BROADCAST]: ${message}`;
+		for (const ws of this.ctx.getWebSockets()) {
+			ws.send(formattedMessage);
+		}
 	}
 
 	async webSocketClose(
 		ws: WebSocket,
 		code: number,
 		reason: string,
-		wasClean: boolean,
+		wasClean: boolean
 	) {
 		ws.close(code, "Durable Object is closing WebSocket");
 	}
